@@ -1,0 +1,46 @@
+# Environment variables & secrets
+.env
+.env.*
+
+# Python virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Distribution & build artifacts
+build/
+dist/
+*.egg-info/
+eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini

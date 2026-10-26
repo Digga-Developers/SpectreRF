@@ -1,0 +1,23 @@
+.
+├── config                              # Configuration files
+│   └── grafana
+│       └── provisioning
+│           ├── dashboard
+│           │   └── dashboards.yaml
+│           └── datasources
+│               └── datasource.yaml
+├── dashboards                          # Exported Grafana JSON dashboard templates     
+│   └── soc_overview.json   
+├── database                            # Database initialization and schemas
+│   └── init.sql                        # TimescaleDB hypertables, indexes, and retention policies
+├── docker-compose.yaml                 # Orchestrates TimescaleDB and Grafana
+├── .env                                # Environment variables (DB credentials, interface name)
+├── .gitignore
+├── README.md
+└── src                                 # Core application source code
+    ├── capture.py                      # Scapy packet sniffer and frame parser
+    ├── db.py                           # TimescaleDB connection and bulk inserter worker
+    ├── __init__.py
+    ├── main.py                         # Entry point orchestrating capture and insertion
+    └── models.py                       # Data classes / parsers for 802.11 frames
+
