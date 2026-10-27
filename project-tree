@@ -11,9 +11,11 @@
 ├── database                            # Database initialization and schemas
 │   └── init.sql                        # TimescaleDB hypertables, indexes, and retention policies
 ├── docker-compose.yaml                 # Orchestrates TimescaleDB and Grafana
+├── DockerFile
 ├── .env                                # Environment variables (DB credentials, interface name)
 ├── .gitignore
 ├── README.md
+├── requirements.txt
 └── src                                 # Core application source code
     ├── capture.py                      # Scapy packet sniffer and frame parser
     ├── db.py                           # TimescaleDB connection and bulk inserter worker
