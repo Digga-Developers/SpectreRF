@@ -109,7 +109,7 @@ WIRELESS_INTERFACE=wlan0 # REPLACE with actual interface name
 
 ### 3. Start Infrastructure (Docker Compose)
 
-**NOTE:** Spinning up this docker container will handle the creation of the virtual montior and automatically parsing your primary interface name
+**NOTE:** Spinning up this docker container will handle the creation of the virtual montior
 
 Build docker container:
 
