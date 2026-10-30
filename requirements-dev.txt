@@ -1,0 +1,8 @@
+# Install all dependencies needed to run the app
+-r requirements.txt
+
+# Pytest
+pytest>=9,<10
+
+# Linting and formatting
+ruff==0.17.3
