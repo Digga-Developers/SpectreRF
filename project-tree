@@ -15,6 +15,7 @@
 ├── .env                                # Environment variables (DB credentials, interface name)
 ├── .gitignore
 ├── README.md
+├── requirements-dev.txt                # Dependencies for testing and running the app
 ├── requirements.txt
 └── src                                 # Core application source code
     ├── capture.py                      # Scapy packet sniffer and frame parser
