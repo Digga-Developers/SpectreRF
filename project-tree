@@ -6,8 +6,11 @@
 │           │   └── dashboards.yaml
 │           └── datasources
 │               └── datasource.yaml
-├── dashboards                          # Exported Grafana JSON dashboard templates     
-│   └── soc_overview.json   
+├── dashboards                          # Exported Grafana JSON dashboard templates
+│   └── soc_overview.json
+├── data
+│   └── raw
+│       └── packet_logs.txt             # Storage location for packet data logs
 ├── database                            # Database initialization and schemas
 │   └── init.sql                        # TimescaleDB hypertables, indexes, and retention policies
 ├── docker-compose.yaml                 # Orchestrates TimescaleDB and Grafana
