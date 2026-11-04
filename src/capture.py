@@ -94,6 +94,12 @@ if __name__ == "__main__":
     # Continuous sniffing loop
     try:
         sniff(iface=interface, prn=proc_packet, store=False)
+    except PermissionError:
+        print(f"[ERROR]: Insufficient privileges to sniff on interface '{interface}'")
+        sys.exit(1)
+    except OSError as e:
+        print(f"[OS ERROR]: Ensure interface '{interface}' is exists and running ({e})")
+        sys.exit(1)
     except Exception as e:
         print(f"Capture error: {e}", file=sys.stderr, flush=True)
         sys.exit(1)
