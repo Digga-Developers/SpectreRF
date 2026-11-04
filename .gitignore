@@ -8,6 +8,9 @@ env/
 venv/
 ENV/
 
+# Data Folders
+data/
+
 # VS Code settings
 .vscode/
 *.code-workspace

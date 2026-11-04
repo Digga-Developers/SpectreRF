@@ -43,6 +43,8 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    volumes:
+      - ./data/raw:/app/data/raw
     environment:
       - DB_HOST=127.0.0.1
       - DB_PORT=5432

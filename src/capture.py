@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import signal
+from pathlib import Path
 
 from scapy.all import sniff, Packet
 from scapy.layers.dot11 import Dot11, RadioTap, Dot11ProbeReq, Dot11Elt
@@ -12,7 +13,24 @@ from scapy.layers.dot11 import Dot11, RadioTap, Dot11ProbeReq, Dot11Elt
 
 interface = os.getenv("WIRELESS_INTERFACE", "mon0")
 
-def proc_packet(packet: Packet):
+def create_log_file(filename: str) -> Path:
+    packet_log_file = (Path(__file__)
+                   .resolve()
+                   .parents[1]
+                   .joinpath("data/raw")
+                   ).joinpath(filename)
+
+    packet_log_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # clear logs
+    with open(file=packet_log_file, mode="w"):
+        pass
+
+    return packet_log_file
+
+LOG_FILE = create_log_file("packet_logs.txt")
+
+def proc_packet(packet: Packet) -> None:
     """
     Processes passively captured packets collected via virtual monitor.
     Data is pulled from 802.11 layer and attempts to parse the MAC address
@@ -50,13 +68,18 @@ def proc_packet(packet: Packet):
                 ssid = elt_layer.info.decode("utf-8", errors='ignore')
             except Exception:
                 ssid = "<hidden/empty>"
-            print(f"[PROBE] MAC: {client_mac} | RSSI: {rssi} dBm | Searching for: '{ssid}'")
+
+            with open(file=LOG_FILE, mode="a") as f:
+                f.write(f"[PROBE] MAC: {client_mac} | RSSI: {rssi} dBm | Searching for: '{ssid}'\n")
+                f.flush()
 
         # Method 2: Capturing from data frames
         elif dot11_layer.type == 2: # 2 == dataframe
             # On enterprise networks payloads are encrypted, but Layer 2 should still be visible
             # only print MAC & RSSI
-            print(f"[DATA/ACTIVE] MAC: {client_mac} | RSSI: {rssi} dBm")
+            with open(file=LOG_FILE, mode="a") as f:
+                f.write(f"[DATA/ACTIVE] MAC: {client_mac} | RSSI: {rssi} dBm\n")
+                f.flush()
 
 def signal_handler():
     print("\nShutting down sniffer cleanly...", flush=True)

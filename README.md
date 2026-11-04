@@ -117,7 +117,7 @@ Build docker container:
 docker compose build spectrerf --no-cache
 ```
 
-Spin up TimescaleDB and Grafana:
+Spin up Sniffer, TimescaleDB, and Grafana:
 
 ```bash
 docker compose up -d
