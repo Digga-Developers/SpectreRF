@@ -5,7 +5,9 @@ import signal
 from pathlib import Path
 
 from scapy.all import sniff, Packet
-from scapy.layers.dot11 import Dot11, RadioTap, Dot11ProbeReq, Dot11Elt
+from scapy.layers.dot11 import (
+    Dot11, RadioTap, Dot11ProbeReq, Dot11Elt, Dot11Beacon, Dot11Deauth
+)
 
 
 # TODO: implement full functionality
@@ -60,7 +62,7 @@ def proc_packet(packet: Packet) -> None:
             radio_tap = packet.getlayer(RadioTap)
             rssi = getattr(radio_tap, "dBm_AntSignal", "N/A")
 
-        # Method 1: Capture Probe Requests
+        # Capture Probe Requests
         if packet.haslayer(Dot11ProbeReq) and packet.haslayer(Dot11Elt):
             try:
                 # attempt to collect target ssid foreign device is searching for
@@ -73,7 +75,37 @@ def proc_packet(packet: Packet) -> None:
                 f.write(f"[PROBE] MAC: {client_mac} | RSSI: {rssi} dBm | Searching for: '{ssid}'\n")
                 f.flush()
 
-        # Method 2: Capturing from data frames
+        # Capture Access Point Beacons
+        elif packet.haslayer(Dot11Beacon):
+            try:
+                ap_mac = dot11_layer.addr3  # BSSID of the Access Point
+                ssid = packet.getlayer(Dot11Elt).info.decode("utf-8", errors='ignore')
+            except Exception:
+                ssid = "<hidden>"
+
+            with open(file=LOG_FILE, mode="a") as f:
+                f.write(f"[BEACON] AP MAC: {ap_mac} | RSSI: {rssi} dBm | SSID: '{ssid}'\n")
+                f.flush()
+
+        # Capture Deauth Frames 
+        # NOTE: attempted to test this with local device, but attempt was not captured
+        # - look into simulation/testing
+        elif packet.haslayer(Dot11Deauth):
+            try:
+                # Attempt to capture reason (if provided)
+                reason_code = packet[Dot11Deauth].reason
+                target_mac = dot11_layer.addr1  # Receiver (client or broadcast)
+                ap_mac = dot11_layer.addr2      # Transmitter (usually AP)
+            except Exception:
+                reason_code = "Unknown"
+                target_mac = "Unknown"
+                ap_mac = "Unknown"
+
+            with open(file=LOG_FILE, mode="a") as f:
+                f.write(f"[DEAUTH] AP: {ap_mac} -> Target: {target_mac} | Reason Code: {reason_code} | RSSI: {rssi} dBm\n")
+                f.flush()
+
+        # Capture from data frames
         elif dot11_layer.type == 2: # 2 == dataframe
             # On enterprise networks payloads are encrypted, but Layer 2 should still be visible
             # only print MAC & RSSI
